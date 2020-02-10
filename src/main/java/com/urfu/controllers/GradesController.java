@@ -38,7 +38,7 @@ public class GradesController {
     @Autowired
     TechGroupRepository techGroupRepository;
 
-    @GetMapping(path = "/factors", produces = "application/json")
+    @GetMapping(path = "/technologyCards", produces = "application/json")
     public @ResponseBody
     StudentFactorsInformation getStudentFactors(@RequestParam String studentId,
                                                 @RequestParam int eduYear,

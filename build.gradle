@@ -53,3 +53,25 @@ test {
     useJUnitPlatform()
 }
 
+jar {
+    archiveFileName = 'gradesapi.jar'
+}
+
+task deploy {
+    doLast {
+        group = 'Other'
+        description = 'Deploy artefact to remote server'
+
+        ssh.run {
+            session(remotes.target) {
+                println "Deploy archive to ${remotes.target.host}"
+
+                println "Copy archive ${jar.archiveFileName} to ${targetDir}"
+                put from: jar.archiveFile, into: targetDir
+
+                println "Execute script '${targetScript}'"
+                execute targetScript
+            }
+        }
+    }
+}

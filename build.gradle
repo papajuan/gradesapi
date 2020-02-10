@@ -53,14 +53,8 @@ test {
     useJUnitPlatform()
 }
 
-task createJar(type: Jar) {
-    destFile = file("$buildDir/gradesapi.jar")
-}
+task myJar(type: Jar)
 
 artifacts {
-    archives(createJar.destFile) {
-        name 'gradesapi'
-        type 'jar'
-        builtBy createJar
-    }
+    archives myJar
 }

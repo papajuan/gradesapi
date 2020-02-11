@@ -57,9 +57,9 @@ public class GradesController {
         return new StudentFactorsInformation(studentId, eduYear, semester, exportDisciplines);
     }
 
-    private Set<AttestationControl> listControls(TechnologyCardType type, TechnologyCardFactorsType factorsType, String studentId, DisciplineLoad disciplineLoad, boolean isIntermediate) {
+    private List<AttestationControl> listControls(TechnologyCardType type, TechnologyCardFactorsType factorsType, String studentId, DisciplineLoad disciplineLoad, boolean isIntermediate) {
         Iterable<TechnologyCard> cards = studentTotalMarkRepository.findTechnologyCardsByTypeStudentAndDisciplineLoad(type.name(), studentId, disciplineLoad, isIntermediate);
-        HashSet<AttestationControl> result = new HashSet<>();
+        List<AttestationControl> result = new ArrayList<>();
 
         for(TechnologyCard card : cards)
             result.add(new AttestationControl(card.getControlAction(), card.getMaxValue()));
@@ -76,7 +76,7 @@ public class GradesController {
                     ? factors.getIntermediate().setScale(2, RoundingMode.CEILING).doubleValue()
                     : factors.getCurrent().setScale(2, RoundingMode.CEILING).doubleValue();
 
-            Set<AttestationControl> currentControls = listControls(technologyCardType, factorsType, studentId, disciplineLoad, isIntermediate);
+            List<AttestationControl> currentControls = listControls(technologyCardType, factorsType, studentId, disciplineLoad, isIntermediate);
             Attestation currentAttestation = new Attestation(factorsType, factor, currentControls);
 
             result.add(currentAttestation);

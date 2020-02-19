@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import java.util.Set;
 
 /**
- * @author urfu
+ * @author aperminov
  * 31.01.2020
  */
 @Data

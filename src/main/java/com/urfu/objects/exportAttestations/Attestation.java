@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
- * @author urfu
+ * @author aperminov
  * 31.01.2020
  */
 @Data

@@ -7,6 +7,10 @@ import lombok.Getter;
 
 import java.util.Set;
 
+/**
+ * @author aperminov
+ * 31.01.2020
+ */
 @AllArgsConstructor
 public enum TechnologyCardFactorsType implements ITitled {
 

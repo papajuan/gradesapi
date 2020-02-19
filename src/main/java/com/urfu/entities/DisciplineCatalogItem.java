@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * @author urfu
+ * @author aperminov
  * 03.02.2020
  */
 @Entity

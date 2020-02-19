@@ -8,6 +8,10 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
+/**
+ * @author aperminov
+ * 31.01.2020
+ */
 public interface TechnologyCardFactorsRepository extends CrudRepository<TechnologyCardFactors, String> {
 
     @Query("from TechnologyCardFactors tcf where tcf.disciplineLoad in (:disciplineLoads)")

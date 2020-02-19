@@ -15,7 +15,7 @@ import java.math.RoundingMode;
 import java.util.*;
 
 /**
- * @author papajuan
+ * @author aperminov
  * 19.02.2020
  */
 @Service

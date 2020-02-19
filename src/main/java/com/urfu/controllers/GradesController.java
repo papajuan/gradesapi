@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * @author urfu
+ * @author aperminov
  * 28.01.2020
  */
 @RestController
@@ -17,7 +17,7 @@ public class GradesController {
     StudentInformationExporter studentInformationExporter;
 
     /**
-     * Возвращает информацию по всем тех.картам студента по дисциплинам.
+     * Возвращает информацию по всем тех.картам студента согласно дисциплинам.
      *
      * @param studentId
      *         uuid студента

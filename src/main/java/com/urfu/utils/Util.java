@@ -5,7 +5,7 @@ import com.google.common.collect.ImmutableSet;
 import java.util.Set;
 
 /**
- * @author urfu
+ * @author aperminov
  * 03.02.2020
  */
 public class Util {

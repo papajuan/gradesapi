@@ -9,7 +9,7 @@ import lombok.Setter;
 import java.util.Set;
 
 /**
- * @author papajuan
+ * @author aperminov
  * 19.02.2020
  */
 @EqualsAndHashCode(callSuper = true)

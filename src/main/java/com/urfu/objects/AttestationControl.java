@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * @author urfu
+ * @author aperminov
  * 31.01.2020
  */
 @Data

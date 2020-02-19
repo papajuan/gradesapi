@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 import java.io.Serializable;
 
 /**
- * @author urfu
+ * @author aperminov
  * 03.02.2020
  */
 @EqualsAndHashCode

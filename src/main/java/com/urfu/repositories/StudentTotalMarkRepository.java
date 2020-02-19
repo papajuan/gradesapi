@@ -7,6 +7,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+/**
+ * @author aperminov
+ * 31.01.2020
+ */
 public interface StudentTotalMarkRepository extends CrudRepository<StudentTotalMark, Integer> {
 
     @Query("from StudentTotalMark stm where substring(stm.studentId, 1, 32) = :studentId")

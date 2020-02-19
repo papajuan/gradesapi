@@ -1,6 +1,5 @@
 package com.urfu.controllers;
 
-import com.urfu.objects.exportDisciplines.ExportDiscipline;
 import com.urfu.objects.studentInformation.StudentDisciplineScoresInformation;
 import com.urfu.objects.studentInformation.StudentFactorsInformation;
 import com.urfu.services.FactorsExporter;

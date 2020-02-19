@@ -6,6 +6,7 @@ import com.urfu.objects.exportAttestations.Attestation;
 import com.urfu.objects.exportDisciplines.ExportDiscipline;
 import com.urfu.objects.studentInformation.StudentDisciplineScoresInformation;
 import com.urfu.objects.studentInformation.StudentFactorsInformation;
+import com.urfu.objects.studentInformation.StudentInformation;
 import com.urfu.repositories.*;
 import com.urfu.utils.Util;
 import org.springframework.beans.factory.annotation.Autowired;

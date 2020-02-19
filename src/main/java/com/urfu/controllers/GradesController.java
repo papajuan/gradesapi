@@ -29,10 +29,9 @@ public class GradesController {
      * @return информацию по всем тех.картам студента
      */
     @GetMapping(path = "/technologyCards", produces = "application/json")
-    public @ResponseBody
-    StudentFactorsInformation getStudentFactors(@RequestParam String studentId,
-                                                @RequestParam int eduYear,
-                                                @RequestParam String semester) {
+    public @ResponseBody StudentFactorsInformation getStudentFactors(@RequestParam String studentId,
+                                         @RequestParam int eduYear,
+                                         @RequestParam String semester) {
 
         return studentInformationExporter.getStudentFactorsInformation(studentId, eduYear, semester);
     }

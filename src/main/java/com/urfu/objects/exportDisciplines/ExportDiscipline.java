@@ -1,5 +1,6 @@
 package com.urfu.objects.exportDisciplines;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.urfu.objects.DisciplineEvent;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,6 +19,9 @@ public class ExportDiscipline {
 
     private String id;
     private String title;
+
+    @JsonIgnore
     private String titleId;
+
     private Set<DisciplineEvent> events;
 }

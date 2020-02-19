@@ -4,6 +4,7 @@ import com.urfu.entities.*;
 import com.urfu.objects.*;
 import com.urfu.objects.exportAttestations.Attestation;
 import com.urfu.objects.exportDisciplines.ExportDiscipline;
+import com.urfu.objects.studentInformation.StudentDisciplineScoresInformation;
 import com.urfu.objects.studentInformation.StudentFactorsInformation;
 import com.urfu.repositories.*;
 import com.urfu.utils.Util;
@@ -18,7 +19,7 @@ import java.util.*;
  * 19.02.2020
  */
 @Service
-public class FactorsExporter {
+public class StudentInformationExporter {
 
     @Autowired
     ExamListRepository examListRepository;
@@ -123,5 +124,22 @@ public class FactorsExporter {
         }
 
         return result;
+    }
+
+    public StudentDisciplineScoresInformation getScoresInformation(StudentFactorsInformation factorsInformation, String disciplineId) {
+        String studentId = factorsInformation.getUuid();
+        int eduYear = factorsInformation.getEduYear();
+        String termType = Util.getSemester(factorsInformation.getSemester());
+
+        Iterable<DisciplineLoad> allDisciplineLoads = studentTotalMarkRepository
+                .findAllDisciplineLoadByStudentYearSemesterInOldRegister(studentId, eduYear, termType);
+
+        Iterable<DisciplineLoad> agreedDisciplineLoads = technologyCardSettingRepository
+                .findDisciplineLoadsInAgreedTechnologyCards(allDisciplineLoads);
+
+        ExportDiscipline discipline = listExportDisciplines(agreedDisciplineLoads, studentId)
+                .stream().filter(exportDiscipline -> exportDiscipline.getId().equals(disciplineId)).findFirst().get();
+
+        return new StudentDisciplineScoresInformation(studentId, eduYear, termType, discipline);
     }
 }

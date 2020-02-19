@@ -1,5 +1,7 @@
-package com.urfu.objects;
+package com.urfu.objects.exportAttestations;
 
+import com.urfu.objects.AttestationControl;
+import com.urfu.objects.TechnologyCardFactorsType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

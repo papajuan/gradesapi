@@ -2,6 +2,9 @@ package com.urfu.services;
 
 import com.urfu.entities.*;
 import com.urfu.objects.*;
+import com.urfu.objects.exportAttestations.Attestation;
+import com.urfu.objects.exportDisciplines.ExportDiscipline;
+import com.urfu.objects.studentInformation.StudentFactorsInformation;
 import com.urfu.repositories.*;
 import com.urfu.utils.Util;
 import org.springframework.beans.factory.annotation.Autowired;

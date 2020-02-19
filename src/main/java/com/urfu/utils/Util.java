@@ -19,6 +19,6 @@ public class Util {
     public static final String SPRING = "Весенний";
 
     public static String getSemester(String semester) {
-        return semester.equals("autumn") ? Util.AUTUMN : Util.SPRING;
+        return semester.toLowerCase().equals("autumn") ? Util.AUTUMN : Util.SPRING;
     }
 }

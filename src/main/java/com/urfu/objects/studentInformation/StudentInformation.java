@@ -1,7 +1,9 @@
-package com.urfu.objects;
+package com.urfu.objects.studentInformation;
 
+import com.urfu.objects.exportDisciplines.ExportDiscipline;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
@@ -11,10 +13,10 @@ import java.util.Set;
  */
 @Data
 @AllArgsConstructor
-public class StudentFactorsInformation {
+@NoArgsConstructor
+public class StudentInformation {
 
     private String uuid;
     private int eduYear;
     private String semester;
-    Set<ExportDiscipline> disciplines;
 }

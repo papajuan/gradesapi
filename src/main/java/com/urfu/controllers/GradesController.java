@@ -54,8 +54,8 @@ public class GradesController {
      * @return информацию о баллах студента по дисциплинам
      */
     @PostMapping(path = "/scores", consumes = "application/json", produces = "application/json")
-    public @ResponseBody StudentFactorsInformation getStudentScores(@RequestBody StudentFactorsInformation factorsInformation,
+    public @ResponseBody StudentDisciplineScoresInformation getStudentScores(@RequestBody StudentFactorsInformation factorsInformation,
                                                                              @RequestParam String disciplineId) {
-        return factorsInformation;
+        return new StudentDisciplineScoresInformation();
     }
 }

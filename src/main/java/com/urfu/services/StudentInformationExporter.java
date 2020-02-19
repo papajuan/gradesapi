@@ -39,18 +39,31 @@ public class StudentInformationExporter {
     @Autowired
     TechGroupRepository techGroupRepository;
 
+    /**
+     * Gets student factors information.
+     *
+     * @param studentId
+     *         the student id
+     * @param eduYear
+     *         the edu year
+     * @param semester
+     *         the semester
+     *
+     * @return the student factors information
+     */
     public StudentFactorsInformation getStudentFactorsInformation(String studentId, int eduYear, String semester) {
+        Set<ExportDiscipline> exportDisciplines = listExportDisciplines(findAgreedDisciplineLoads(studentId, eduYear, semester), studentId);
+
+        return new StudentFactorsInformation(studentId, eduYear, semester, exportDisciplines);
+    }
+
+    private Iterable<DisciplineLoad> findAgreedDisciplineLoads(String studentId, int eduYear, String semester) {
         String termType = Util.getSemester(semester);
 
         Iterable<DisciplineLoad> allDisciplineLoads = studentTotalMarkRepository
                 .findAllDisciplineLoadByStudentYearSemesterInOldRegister(studentId, eduYear, termType);
 
-        Iterable<DisciplineLoad> agreedDisciplineLoads = technologyCardSettingRepository
-                .findDisciplineLoadsInAgreedTechnologyCards(allDisciplineLoads);
-
-        Set<ExportDiscipline> exportDisciplines = listExportDisciplines(agreedDisciplineLoads, studentId);
-
-        return new StudentFactorsInformation(studentId, eduYear, semester, exportDisciplines);
+        return technologyCardSettingRepository.findDisciplineLoadsInAgreedTechnologyCards(allDisciplineLoads);
     }
 
     private List<AttestationControl> listControls(TechnologyCardType type, String studentId,
@@ -126,20 +139,24 @@ public class StudentInformationExporter {
         return result;
     }
 
+    /**
+     * Gets scores information.
+     *
+     * @param factorsInformation
+     *         the factors information
+     * @param disciplineId
+     *         the discipline id
+     *
+     * @return the scores information
+     */
     public StudentDisciplineScoresInformation getScoresInformation(StudentFactorsInformation factorsInformation, String disciplineId) {
         String studentId = factorsInformation.getUuid();
         int eduYear = factorsInformation.getEduYear();
-        String termType = Util.getSemester(factorsInformation.getSemester());
+        String semester = factorsInformation.getSemester();
 
-        Iterable<DisciplineLoad> allDisciplineLoads = studentTotalMarkRepository
-                .findAllDisciplineLoadByStudentYearSemesterInOldRegister(studentId, eduYear, termType);
-
-        Iterable<DisciplineLoad> agreedDisciplineLoads = technologyCardSettingRepository
-                .findDisciplineLoadsInAgreedTechnologyCards(allDisciplineLoads);
-
-        ExportDiscipline discipline = listExportDisciplines(agreedDisciplineLoads, studentId)
+        ExportDiscipline discipline = listExportDisciplines(findAgreedDisciplineLoads(studentId, eduYear, semester), studentId)
                 .stream().filter(exportDiscipline -> exportDiscipline.getId().equals(disciplineId)).findFirst().get();
 
-        return new StudentDisciplineScoresInformation(studentId, eduYear, termType, discipline);
+        return new StudentDisciplineScoresInformation(studentId, eduYear, semester, discipline);
     }
 }

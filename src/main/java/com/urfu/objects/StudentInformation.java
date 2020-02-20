@@ -1,13 +1,10 @@
-package com.urfu.objects.studentInformation;
+package com.urfu.objects;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.urfu.objects.exportDisciplines.ExportDiscipline;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -17,9 +14,10 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public abstract class StudentInformation {
+public class StudentInformation {
 
     private String uuid;
     private int eduYear;
     private String semester;
+    Set<? extends ExportDiscipline> disciplines;
 }

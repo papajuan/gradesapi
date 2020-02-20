@@ -13,8 +13,8 @@ import java.util.Set;
  * 31.01.2020
  */
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class ExportDiscipline {
 
     private String id;

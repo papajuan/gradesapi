@@ -1,17 +1,21 @@
 package com.urfu.services;
 
+import com.google.common.collect.ImmutableSet;
 import com.urfu.entities.*;
-import com.urfu.objects.*;
+import com.urfu.objects.AttestationControl;
+import com.urfu.objects.DisciplineEvent;
+import com.urfu.objects.StudentInformation;
+import com.urfu.objects.TechnologyCardFactorsType;
 import com.urfu.objects.exportAttestations.Attestation;
 import com.urfu.objects.exportDisciplines.ExportDiscipline;
-import com.urfu.objects.studentInformation.StudentDisciplineScoresInformation;
-import com.urfu.objects.studentInformation.StudentFactorsInformation;
-import com.urfu.objects.studentInformation.StudentInformation;
+import com.urfu.objects.exportDisciplines.FactorsDiscipline;
+import com.urfu.objects.exportDisciplines.ScoresDiscipline;
 import com.urfu.repositories.*;
 import com.urfu.utils.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
 
@@ -52,10 +56,10 @@ public class StudentInformationExporter {
      *
      * @return the student factors information
      */
-    public StudentFactorsInformation getStudentFactorsInformation(String studentId, int eduYear, String semester) {
-        Set<ExportDiscipline> exportDisciplines = listExportDisciplines(findAgreedDisciplineLoads(studentId, eduYear, semester), studentId);
+    public StudentInformation getStudentFactorsInformation(String studentId, int eduYear, String semester) {
+        Set<FactorsDiscipline> factorsDisciplines = listFactorsDisciplines(findAgreedDisciplineLoads(studentId, eduYear, semester), studentId);
 
-        return new StudentFactorsInformation(studentId, eduYear, semester, exportDisciplines);
+        return new StudentInformation(studentId, eduYear, semester, factorsDisciplines);
     }
 
     private Iterable<DisciplineLoad> findAgreedDisciplineLoads(String studentId, int eduYear, String semester) {
@@ -121,6 +125,15 @@ public class StudentInformationExporter {
         return result;
     }
 
+    private Set<FactorsDiscipline> listFactorsDisciplines(Iterable<DisciplineLoad> agreedDisciplineLoads, String studentId) {
+        Set<FactorsDiscipline> result = new HashSet<>();
+
+        for(ExportDiscipline exportDiscipline : listExportDisciplines(agreedDisciplineLoads, studentId))
+            result.add(new FactorsDiscipline(exportDiscipline));
+
+        return result;
+    }
+
     private Set<ExportDiscipline> listExportDisciplines(Iterable<DisciplineLoad> agreedDisciplineLoads, String studentId) {
         Set<ExportDiscipline> result = new HashSet<>();
 
@@ -134,6 +147,7 @@ public class StudentInformationExporter {
                 disciplineTitle = techGroupRepository.getTitleByDisciplineLoad(disciplineLoad, studentId).get();
 
             ExportDiscipline exportDiscipline = new ExportDiscipline(disciplineLoadId, disciplineTitle, disciplineId, disciplineEvents);
+
             result.add(exportDiscipline);
         }
 
@@ -150,14 +164,30 @@ public class StudentInformationExporter {
      *
      * @return the scores information
      */
-    public StudentDisciplineScoresInformation getScoresInformation(StudentFactorsInformation factorsInformation, String disciplineId) {
+    public StudentInformation getScoresInformation(StudentInformation factorsInformation, String disciplineId) {
         String studentId = factorsInformation.getUuid();
         int eduYear = factorsInformation.getEduYear();
         String semester = factorsInformation.getSemester();
 
-        ExportDiscipline discipline = listExportDisciplines(findAgreedDisciplineLoads(studentId, eduYear, semester), studentId)
-                .stream().filter(exportDiscipline -> exportDiscipline.getId().equals(disciplineId)).findFirst().get();
+        return new StudentInformation(studentId, eduYear, semester,
+                ImmutableSet.of(getScoresDiscipline(studentId, eduYear, semester, disciplineId)));
+    }
 
-        return new StudentDisciplineScoresInformation(studentId, eduYear, semester, discipline);
+    private ScoresDiscipline getScoresDiscipline(String studentId, int eduYear, String semester, String disciplineLoadId) {
+        ScoresDiscipline discipline;
+
+        for(ExportDiscipline exportDiscipline : listExportDisciplines(findAgreedDisciplineLoads(studentId, eduYear, semester), studentId)) {
+            if(exportDiscipline.getId().equals(disciplineLoadId)) {
+                discipline = new ScoresDiscipline(exportDiscipline);
+                discipline.setDisciplineTotalScore(getDisciplineTotalScore(exportDiscipline));
+                return discipline;
+            }
+        }
+
+        return new ScoresDiscipline();
+    }
+
+    private BigDecimal getDisciplineTotalScore(ExportDiscipline discipline) {
+        return BigDecimal.ONE;
     }
 }

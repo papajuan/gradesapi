@@ -6,18 +6,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
  * @author aperminov
- * 31.01.2020
+ * 21.02.2020
  */
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class Attestation {
+@AllArgsConstructor
+public class TechnologyCardAttestation {
 
     private TechnologyCardFactorsType type;
-    private double factor;
+    private BigDecimal factor;
     private List<AttestationControl> controls;
 }

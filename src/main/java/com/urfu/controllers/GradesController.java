@@ -1,6 +1,7 @@
 package com.urfu.controllers;
 
-import com.urfu.objects.StudentInformation;
+import com.urfu.objects.studentInfo.StudentScoresInfo;
+import com.urfu.objects.studentInfo.StudentTechCardInfo;
 import com.urfu.services.StudentInformationExporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -29,9 +30,9 @@ public class GradesController {
      */
     @GetMapping(path = "/technologyCards", produces = "application/json")
     public @ResponseBody
-    StudentInformation getStudentFactors(@RequestParam String studentId,
-                                         @RequestParam int eduYear,
-                                         @RequestParam String semester) {
+    StudentTechCardInfo getStudentFactors(@RequestParam String studentId,
+                                          @RequestParam int eduYear,
+                                          @RequestParam String semester) {
 
         return studentInformationExporter.getStudentFactorsInformation(studentId, eduYear, semester);
     }
@@ -48,9 +49,10 @@ public class GradesController {
      * @return информацию о баллах студента по дисциплинам
      */
     @PostMapping(path = "/scores", consumes = "application/json", produces = "application/json")
-    public @ResponseBody StudentInformation getStudentScores(@RequestBody StudentInformation factorsInformation,
-                                                                             @RequestParam String disciplineId) {
+    public @ResponseBody
+    StudentScoresInfo getStudentScores(@RequestBody StudentTechCardInfo factorsInformation,
+                                       @RequestParam String disciplineId) throws Exception {
 
-        return studentInformationExporter.getScoresInformation(factorsInformation, disciplineId);
+        return studentInformationExporter.getScoresInfo(factorsInformation, disciplineId);
     }
 }

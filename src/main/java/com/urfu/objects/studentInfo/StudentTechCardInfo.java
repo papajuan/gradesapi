@@ -1,6 +1,6 @@
-package com.urfu.objects;
+package com.urfu.objects.studentInfo;
 
-import com.urfu.objects.exportDisciplines.ExportDiscipline;
+import com.urfu.objects.disciplines.TechnologyCardDiscipline;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,10 +14,10 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class StudentInformation {
+public class StudentTechCardInfo {
 
     private String uuid;
     private int eduYear;
     private String semester;
-    Set<? extends ExportDiscipline> disciplines;
+    Set<TechnologyCardDiscipline> disciplines;
 }

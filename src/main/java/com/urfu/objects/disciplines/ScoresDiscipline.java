@@ -1,27 +1,28 @@
-package com.urfu.objects.exportDisciplines;
+package com.urfu.objects.disciplines;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.urfu.objects.DisciplineEvent;
+import com.urfu.objects.disciplineEvents.ScoresDisciplineEvent;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 /**
  * @author aperminov
- * 31.01.2020
+ * 19.02.2020
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ExportDiscipline {
+public class ScoresDiscipline {
 
     private String id;
     private String title;
+    private BigDecimal totalCalculatedScore;
+    Set<ScoresDisciplineEvent> events;
 
     @JsonIgnore
     private String titleId;
-
-    private Set<DisciplineEvent> events;
 }

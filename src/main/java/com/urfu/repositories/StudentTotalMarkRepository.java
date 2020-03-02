@@ -21,7 +21,7 @@ public interface StudentTotalMarkRepository extends CrudRepository<StudentTotalM
             "and stm.disciplineLoad.eduYear = :eduYear " +
             "and stm.disciplineLoad.termType = :termType " +
             "and stm.disciplineLoad.hasNewRegister = false " +
-            "and stm.isMinor = true")
+            "and (stm.isMinor = false or stm.isMinor is null)")
     Iterable<DisciplineLoad> findAllDisciplineLoadByStudentYearSemesterInOldRegister(@Param("studentId") String studentId,
                                                                                      @Param("eduYear") int eduYear,
                                                                                      @Param("termType") String termType);

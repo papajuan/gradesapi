@@ -12,14 +12,14 @@ import java.util.Set;
  * 31.01.2020
  */
 @AllArgsConstructor
-public enum TechnologyCardFactorsType implements ITitled {
+public enum TechCardFactorsType implements ITitled {
 
     current("текущая"), intermediate("промежуточная"), total("итоговая");
 
     @Getter
     private final String title;
 
-    public static Set<TechnologyCardFactorsType> factorsTypes = ImmutableSet.of(
+    public static Set<TechCardFactorsType> factorsTypes = ImmutableSet.of(
             current, intermediate
     );
 }

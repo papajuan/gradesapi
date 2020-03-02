@@ -2,13 +2,13 @@ package com.urfu.services;
 
 import com.urfu.entities.TechnologyCardType;
 import com.urfu.objects.AttestationControl;
-import com.urfu.objects.TechnologyCardFactorsType;
+import com.urfu.objects.TechCardFactorsType;
 import com.urfu.objects.disciplineEvents.ScoresDisciplineEvent;
-import com.urfu.objects.disciplineEvents.TechnologyCardDisciplineEvent;
+import com.urfu.objects.disciplineEvents.TechCardDisciplineEvent;
 import com.urfu.objects.disciplines.ScoresDiscipline;
-import com.urfu.objects.disciplines.TechnologyCardDiscipline;
+import com.urfu.objects.disciplines.TechCardDiscipline;
 import com.urfu.objects.exportAttestations.ScoresAttestation;
-import com.urfu.objects.exportAttestations.TechnologyCardAttestation;
+import com.urfu.objects.exportAttestations.TechCardAttestation;
 import com.urfu.objects.studentInfo.StudentDisciplineInfo;
 import com.urfu.objects.studentInfo.StudentScoresInfo;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,7 @@ public class DisciplineScoresExporter {
      * @throws Exception
      */
     public StudentScoresInfo getScoresInfo(StudentDisciplineInfo disciplineInfo) throws Exception {
-        TechnologyCardDiscipline techCardDiscipline = disciplineInfo.getDiscipline();
+        TechCardDiscipline techCardDiscipline = disciplineInfo.getDiscipline();
         String disciplineId = techCardDiscipline.getId();
 
         String studentId = disciplineInfo.getUuid();
@@ -57,10 +57,10 @@ public class DisciplineScoresExporter {
         return result;
     }
 
-    private Set<ScoresDisciplineEvent> listScoresDisciplineEvents(Set<TechnologyCardDisciplineEvent> techCardEvents) throws Exception {
+    private Set<ScoresDisciplineEvent> listScoresDisciplineEvents(Set<TechCardDisciplineEvent> techCardEvents) throws Exception {
         Set<ScoresDisciplineEvent> result = new HashSet<>();
 
-        for(TechnologyCardDisciplineEvent techCardEvent : techCardEvents) {
+        for(TechCardDisciplineEvent techCardEvent : techCardEvents) {
             TechnologyCardType type = techCardEvent.getType();
             String typeTitle = techCardEvent.getTypeTitle();
             BigDecimal totalFactor = techCardEvent.getTotalFactor();
@@ -75,11 +75,11 @@ public class DisciplineScoresExporter {
         return result;
     }
 
-    private Set<ScoresAttestation> listScoresAttestations(Set<TechnologyCardAttestation> techCardAttestations) throws Exception {
+    private Set<ScoresAttestation> listScoresAttestations(Set<TechCardAttestation> techCardAttestations) throws Exception {
         Set<ScoresAttestation> result = new HashSet<>();
 
-        for(TechnologyCardAttestation techCardAttestation : techCardAttestations) {
-            TechnologyCardFactorsType type = techCardAttestation.getType();
+        for(TechCardAttestation techCardAttestation : techCardAttestations) {
+            TechCardFactorsType type = techCardAttestation.getType();
             BigDecimal factor = techCardAttestation.getFactor();
             BigDecimal calculatedScore = getCalculatedScore(techCardAttestation.getControls(), factor).setScale(2, RoundingMode.DOWN);
 

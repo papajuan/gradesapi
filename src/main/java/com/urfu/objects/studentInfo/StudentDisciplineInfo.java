@@ -1,6 +1,6 @@
 package com.urfu.objects.studentInfo;
 
-import com.urfu.objects.disciplines.TechnologyCardDiscipline;
+import com.urfu.objects.disciplines.TechCardDiscipline;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,5 +17,5 @@ public class StudentDisciplineInfo {
     private String uuid;
     private int eduYear;
     private String semester;
-    private TechnologyCardDiscipline discipline;
+    private TechCardDiscipline discipline;
 }

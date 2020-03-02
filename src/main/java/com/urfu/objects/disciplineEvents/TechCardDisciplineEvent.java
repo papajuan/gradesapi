@@ -1,7 +1,7 @@
 package com.urfu.objects.disciplineEvents;
 
 import com.urfu.entities.TechnologyCardType;
-import com.urfu.objects.exportAttestations.TechnologyCardAttestation;
+import com.urfu.objects.exportAttestations.TechCardAttestation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,11 +16,11 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TechnologyCardDisciplineEvent {
+public class TechCardDisciplineEvent {
 
     private TechnologyCardType type;
     private String typeTitle;
     private BigDecimal totalFactor;
     private boolean testBeforeExam;
-    private Set<TechnologyCardAttestation> attestations;
+    private Set<TechCardAttestation> attestations;
 }

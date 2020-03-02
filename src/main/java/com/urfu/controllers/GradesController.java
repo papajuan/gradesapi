@@ -2,7 +2,7 @@ package com.urfu.controllers;
 
 import com.urfu.objects.studentInfo.StudentDisciplineInfo;
 import com.urfu.objects.studentInfo.StudentScoresInfo;
-import com.urfu.objects.studentInfo.StudentTechCardInfo;
+import com.urfu.objects.studentInfo.TechCardInfo;
 import com.urfu.services.DisciplineScoresExporter;
 import com.urfu.services.TechCardExporter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,9 +35,9 @@ public class GradesController {
      */
     @GetMapping(path = "/technologyCards", produces = "application/json")
     public @ResponseBody
-    StudentTechCardInfo getStudentFactors(@RequestParam String studentId,
-                                          @RequestParam int eduYear,
-                                          @RequestParam String semester) {
+    TechCardInfo getStudentFactors(@RequestParam String studentId,
+                                   @RequestParam int eduYear,
+                                   @RequestParam String semester) {
 
         return techCardExporter.getStudentFactorsInformation(studentId, eduYear, semester);
     }

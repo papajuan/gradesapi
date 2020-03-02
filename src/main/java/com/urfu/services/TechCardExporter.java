@@ -2,11 +2,11 @@ package com.urfu.services;
 
 import com.urfu.entities.*;
 import com.urfu.objects.AttestationControl;
-import com.urfu.objects.TechnologyCardFactorsType;
-import com.urfu.objects.disciplineEvents.TechnologyCardDisciplineEvent;
-import com.urfu.objects.disciplines.TechnologyCardDiscipline;
-import com.urfu.objects.exportAttestations.TechnologyCardAttestation;
-import com.urfu.objects.studentInfo.StudentTechCardInfo;
+import com.urfu.objects.TechCardFactorsType;
+import com.urfu.objects.disciplineEvents.TechCardDisciplineEvent;
+import com.urfu.objects.disciplines.TechCardDiscipline;
+import com.urfu.objects.exportAttestations.TechCardAttestation;
+import com.urfu.objects.studentInfo.TechCardInfo;
 import com.urfu.repositories.*;
 import com.urfu.utils.Util;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,11 +53,11 @@ public class TechCardExporter {
      *
      * @return the student factors information
      */
-    public StudentTechCardInfo getStudentFactorsInformation(String studentId, int eduYear, String semester) {
-        Set<TechnologyCardDiscipline> technologyCardDisciplines =
+    public TechCardInfo getStudentFactorsInformation(String studentId, int eduYear, String semester) {
+        Set<TechCardDiscipline> techCardDisciplines =
                 listFactorsDisciplines(findAgreedDisciplineLoads(studentId, eduYear, semester), studentId);
 
-        return new StudentTechCardInfo(studentId, eduYear, semester, technologyCardDisciplines);
+        return new TechCardInfo(studentId, eduYear, semester, techCardDisciplines);
     }
 
     private Iterable<DisciplineLoad> findAgreedDisciplineLoads(String studentId, int eduYear, String semester) {
@@ -81,27 +81,27 @@ public class TechCardExporter {
         return result;
     }
 
-    private Set<TechnologyCardAttestation> listTechnologyCardAttestations(TechnologyCardType technologyCardType, TechnologyCardFactors factors,
-                                                            String studentId, DisciplineLoad disciplineLoad) {
-        Set<TechnologyCardAttestation> result = new HashSet<>();
+    private Set<TechCardAttestation> listTechnologyCardAttestations(TechnologyCardType technologyCardType, TechnologyCardFactors factors,
+                                                                    String studentId, DisciplineLoad disciplineLoad) {
+        Set<TechCardAttestation> result = new HashSet<>();
 
-        for(TechnologyCardFactorsType factorsType : TechnologyCardFactorsType.factorsTypes) {
-            boolean isIntermediate = factorsType == TechnologyCardFactorsType.intermediate;
+        for(TechCardFactorsType factorsType : TechCardFactorsType.factorsTypes) {
+            boolean isIntermediate = factorsType == TechCardFactorsType.intermediate;
             BigDecimal factor = isIntermediate
                     ? factors.getIntermediate().setScale(2, RoundingMode.DOWN)
                     : factors.getCurrent().setScale(2, RoundingMode.DOWN);
 
             List<AttestationControl> currentControls = listControls(technologyCardType, studentId, disciplineLoad, isIntermediate);
-            TechnologyCardAttestation currentTechnologyCardAttestation = new TechnologyCardAttestation(factorsType, factor, currentControls);
+            TechCardAttestation currentTechCardAttestation = new TechCardAttestation(factorsType, factor, currentControls);
 
-            result.add(currentTechnologyCardAttestation);
+            result.add(currentTechCardAttestation);
         }
 
         return result;
     }
 
-    private Set<TechnologyCardDisciplineEvent> listDisciplineEvents(DisciplineLoad disciplineLoad, String studentId) {
-        Set<TechnologyCardDisciplineEvent> result = new HashSet<>();
+    private Set<TechCardDisciplineEvent> listDisciplineEvents(DisciplineLoad disciplineLoad, String studentId) {
+        Set<TechCardDisciplineEvent> result = new HashSet<>();
 
         for(TechnologyCard technologyCard : technologyCardRepository.findAllByDisciplineLoad(disciplineLoad)) {
             TechnologyCardType technologyCardType = TechnologyCardType.valueOf(technologyCard.getTechnologyCardType());
@@ -113,29 +113,29 @@ public class TechCardExporter {
             Optional<ExamList> examList = examListRepository.findByStudentAndTechCard(studentId, technologyCard);
             boolean isTestBeforeExam = examList.isPresent() && examList.get().isTestBeforeExam();
 
-            Set<TechnologyCardAttestation> technologyCardAttestations = listTechnologyCardAttestations(technologyCardType, factors, studentId, disciplineLoad);
+            Set<TechCardAttestation> techCardAttestations = listTechnologyCardAttestations(technologyCardType, factors, studentId, disciplineLoad);
 
-            TechnologyCardDisciplineEvent technologyCardDisciplineEvent =
-                    new TechnologyCardDisciplineEvent(technologyCardType, technologyCardType.getTitle(), totalFactor, isTestBeforeExam, technologyCardAttestations);
-            result.add(technologyCardDisciplineEvent);
+            TechCardDisciplineEvent techCardDisciplineEvent =
+                    new TechCardDisciplineEvent(technologyCardType, technologyCardType.getTitle(), totalFactor, isTestBeforeExam, techCardAttestations);
+            result.add(techCardDisciplineEvent);
         }
 
         return result;
     }
 
-    private Set<TechnologyCardDiscipline> listFactorsDisciplines(Iterable<DisciplineLoad> agreedDisciplineLoads, String studentId) {
-        Set<TechnologyCardDiscipline> result = new HashSet<>();
+    private Set<TechCardDiscipline> listFactorsDisciplines(Iterable<DisciplineLoad> agreedDisciplineLoads, String studentId) {
+        Set<TechCardDiscipline> result = new HashSet<>();
 
         for(DisciplineLoad disciplineLoad : agreedDisciplineLoads) {
             String disciplineLoadId = disciplineLoad.getDisciplineLoadId();
             String disciplineTitle = disciplineLoad.getDisciplineCatalogItem().getTitle();
             String disciplineId = disciplineLoad.getDisciplineCatalogItem().getDisciplineCatalogItemId();
-            Set<TechnologyCardDisciplineEvent> technologyCardDisciplineEvents = listDisciplineEvents(disciplineLoad, studentId);
+            Set<TechCardDisciplineEvent> techCardDisciplineEvents = listDisciplineEvents(disciplineLoad, studentId);
 
             if(Util.newRegisterDisciplineTitles.contains(disciplineTitle.toLowerCase()))
                 disciplineTitle = techGroupRepository.getTitleByDisciplineLoad(disciplineLoad, studentId).get();
 
-            TechnologyCardDiscipline exportDiscipline = new TechnologyCardDiscipline(disciplineLoadId, disciplineTitle, disciplineId, technologyCardDisciplineEvents);
+            TechCardDiscipline exportDiscipline = new TechCardDiscipline(disciplineLoadId, disciplineTitle, disciplineId, techCardDisciplineEvents);
 
             result.add(exportDiscipline);
         }

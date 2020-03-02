@@ -1,7 +1,7 @@
 package com.urfu.objects.disciplines;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.urfu.objects.disciplineEvents.TechnologyCardDisciplineEvent;
+import com.urfu.objects.disciplineEvents.TechCardDisciplineEvent;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +15,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TechnologyCardDiscipline {
+public class TechCardDiscipline {
 
     private String id;
     private String title;
@@ -23,5 +23,5 @@ public class TechnologyCardDiscipline {
     @JsonIgnore
     private String titleId;
 
-    private Set<TechnologyCardDisciplineEvent> events;
+    private Set<TechCardDisciplineEvent> events;
 }

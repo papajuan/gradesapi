@@ -1,7 +1,7 @@
 package com.urfu.objects.exportAttestations;
 
 import com.urfu.objects.AttestationControl;
-import com.urfu.objects.TechnologyCardFactorsType;
+import com.urfu.objects.TechCardFactorsType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,9 +16,9 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TechnologyCardAttestation {
+public class TechCardAttestation {
 
-    private TechnologyCardFactorsType type;
+    private TechCardFactorsType type;
     private BigDecimal factor;
     private List<AttestationControl> controls;
 }

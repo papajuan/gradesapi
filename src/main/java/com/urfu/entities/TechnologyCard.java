@@ -28,8 +28,13 @@ public class TechnologyCard {
     private DisciplineLoad disciplineLoad;
 
     @Column(name = "technologycardtype")
+    // TODO Переделать на TechnologyCardType вместо String
     private String technologyCardType;
 
     @Column(name = "intermediate")
     private boolean isIntermediate;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "kmer", referencedColumnName = "kmer")
+    private ControlAction event;
 }

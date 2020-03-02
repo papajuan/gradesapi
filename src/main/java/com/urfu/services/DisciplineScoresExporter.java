@@ -1,5 +1,6 @@
 package com.urfu.services;
 
+import com.urfu.entities.ControlAction;
 import com.urfu.entities.TechnologyCardType;
 import com.urfu.objects.AttestationControl;
 import com.urfu.objects.Grade;
@@ -12,7 +13,8 @@ import com.urfu.objects.exportAttestations.ScoresAttestation;
 import com.urfu.objects.exportAttestations.TechCardAttestation;
 import com.urfu.objects.studentInfo.DisciplineInfo;
 import com.urfu.objects.studentInfo.ScoresInfo;
-import com.urfu.utils.Util;
+import com.urfu.repositories.ControlActionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -27,6 +29,13 @@ import java.util.Set;
  */
 @Service
 public class DisciplineScoresExporter {
+
+    @Autowired
+    private ControlActionRepository controlActionRepository;
+
+    @Autowired
+    private MarkService markService;
+
     /**
      * @param disciplineInfo
      *
@@ -43,7 +52,9 @@ public class DisciplineScoresExporter {
         int eduYear = disciplineInfo.getEduYear();
         Set<ScoresDisciplineEvent> scoresDisciplineEvents =  listScoresDisciplineEvents(techCardDiscipline.getEvents());
         BigDecimal disciplineTotalScore = getDisciplineTotalScore(scoresDisciplineEvents).setScale(2, RoundingMode.DOWN);
-        Grade grade = new Grade(disciplineTotalScore, Util.getMarkFromScore(disciplineTotalScore));
+
+        ControlAction controlAction = controlActionRepository.getControlActionByDisciplineId(disciplineId).get();
+        Grade grade = new Grade(disciplineTotalScore, markService.getMarkFromScore(disciplineTotalScore, controlAction));
 
         ScoresDiscipline scoresDiscipline = new ScoresDiscipline(disciplineId, techCardDiscipline.getTitle(),
                 grade, scoresDisciplineEvents, techCardDiscipline.getTitleId());

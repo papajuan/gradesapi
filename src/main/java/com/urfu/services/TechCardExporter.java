@@ -24,22 +24,22 @@ import java.util.*;
 public class TechCardExporter {
 
     @Autowired
-    ExamListRepository examListRepository;
+    private ExamListRepository examListRepository;
 
     @Autowired
-    StudentTotalMarkRepository studentTotalMarkRepository;
+    private StudentTotalMarkRepository studentTotalMarkRepository;
 
     @Autowired
-    TechnologyCardFactorsRepository technologyCardFactorsRepository;
+    private TechnologyCardFactorsRepository technologyCardFactorsRepository;
 
     @Autowired
-    TechnologyCardRepository technologyCardRepository;
+    private TechnologyCardRepository technologyCardRepository;
 
     @Autowired
-    TechnologyCardSettingRepository technologyCardSettingRepository;
+    private TechnologyCardSettingRepository technologyCardSettingRepository;
 
     @Autowired
-    TechGroupRepository techGroupRepository;
+    private TechGroupRepository techGroupRepository;
 
     /**
      * Gets student factors information.

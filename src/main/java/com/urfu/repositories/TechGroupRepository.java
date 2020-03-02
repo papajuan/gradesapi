@@ -8,6 +8,10 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
+/**
+ * @author aperminov
+ * 31.01.2020
+ */
 public interface TechGroupRepository extends CrudRepository<TechGroup, Long> {
 
     @Query("select distinct substring(tg.disciplineTitle, 1, locate('\\', tg.disciplineTitle) - 1) " +

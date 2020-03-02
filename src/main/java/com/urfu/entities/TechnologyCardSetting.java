@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 
 /**
- * @author urfu
+ * @author aperminov
  * 03.02.2020
  */
 @Entity

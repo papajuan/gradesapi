@@ -8,7 +8,7 @@ import lombok.Getter;
 import java.util.Collection;
 
 /**
- * @author urfu
+ * @author aperminov
  * 03.02.2020
  */
 @AllArgsConstructor

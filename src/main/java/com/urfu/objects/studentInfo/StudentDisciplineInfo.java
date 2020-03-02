@@ -1,22 +1,21 @@
-package com.urfu.objects.studentInformation;
+package com.urfu.objects.studentInfo;
 
-import com.urfu.objects.exportDisciplines.ExportDiscipline;
+import com.urfu.objects.disciplines.TechnologyCardDiscipline;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
-
 /**
- * @author urfu
- * 31.01.2020
+ * @author aperminov
+ * 02.03.2020
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class StudentInformation {
+public class StudentDisciplineInfo {
 
     private String uuid;
     private int eduYear;
     private String semester;
+    private TechnologyCardDiscipline discipline;
 }

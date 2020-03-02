@@ -1,7 +1,7 @@
 package com.urfu.controllers;
 
-import com.urfu.objects.studentInfo.StudentDisciplineInfo;
-import com.urfu.objects.studentInfo.StudentScoresInfo;
+import com.urfu.objects.studentInfo.DisciplineInfo;
+import com.urfu.objects.studentInfo.ScoresInfo;
 import com.urfu.objects.studentInfo.TechCardInfo;
 import com.urfu.services.DisciplineScoresExporter;
 import com.urfu.services.TechCardExporter;
@@ -52,7 +52,8 @@ public class GradesController {
      * @return информацию о баллах студента по дисциплине
      */
     @PostMapping(path = "/scores", consumes = "application/json", produces = "application/json")
-    public @ResponseBody StudentScoresInfo getStudentScores(@RequestBody StudentDisciplineInfo disciplineInfo) throws Exception {
+    public @ResponseBody
+    ScoresInfo getStudentScores(@RequestBody DisciplineInfo disciplineInfo) throws Exception {
 
         return disciplineScoresExporter.getScoresInfo(disciplineInfo);
     }

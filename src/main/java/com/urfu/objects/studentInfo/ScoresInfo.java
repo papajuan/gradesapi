@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class StudentScoresInfo {
+public class ScoresInfo {
 
     private String uuid;
     private int eduYear;

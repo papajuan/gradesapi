@@ -9,8 +9,8 @@ import com.urfu.objects.disciplines.ScoresDiscipline;
 import com.urfu.objects.disciplines.TechCardDiscipline;
 import com.urfu.objects.exportAttestations.ScoresAttestation;
 import com.urfu.objects.exportAttestations.TechCardAttestation;
-import com.urfu.objects.studentInfo.StudentDisciplineInfo;
-import com.urfu.objects.studentInfo.StudentScoresInfo;
+import com.urfu.objects.studentInfo.DisciplineInfo;
+import com.urfu.objects.studentInfo.ScoresInfo;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -32,7 +32,7 @@ public class DisciplineScoresExporter {
      *
      * @throws Exception
      */
-    public StudentScoresInfo getScoresInfo(StudentDisciplineInfo disciplineInfo) throws Exception {
+    public ScoresInfo getScoresInfo(DisciplineInfo disciplineInfo) throws Exception {
         TechCardDiscipline techCardDiscipline = disciplineInfo.getDiscipline();
         String disciplineId = techCardDiscipline.getId();
 
@@ -45,7 +45,7 @@ public class DisciplineScoresExporter {
         ScoresDiscipline scoresDiscipline = new ScoresDiscipline(disciplineId, techCardDiscipline.getTitle(),
                 disciplineTotalScore, scoresDisciplineEvents, techCardDiscipline.getTitleId());
 
-        return new StudentScoresInfo(studentId, eduYear, semester, scoresDiscipline);
+        return new ScoresInfo(studentId, eduYear, semester, scoresDiscipline);
     }
 
     private BigDecimal getDisciplineTotalScore(Set<ScoresDisciplineEvent> scoresEvents) {

@@ -1,11 +1,13 @@
 package com.urfu.objects.exportAttestations;
 
+import com.urfu.objects.AttestationControl;
 import com.urfu.objects.TechCardFactorsType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author aperminov
@@ -18,5 +20,7 @@ public class ScoresAttestation {
 
     private TechCardFactorsType type;
     private BigDecimal factor;
-    private BigDecimal calculatedScore;
+    private BigDecimal scoreWithoutFactor;
+    private BigDecimal scoreWithFactor;
+    List<AttestationControl> controls;
 }

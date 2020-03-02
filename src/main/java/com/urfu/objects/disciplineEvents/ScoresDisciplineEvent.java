@@ -1,6 +1,5 @@
 package com.urfu.objects.disciplineEvents;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.urfu.entities.TechnologyCardType;
 import com.urfu.objects.exportAttestations.ScoresAttestation;
 import lombok.AllArgsConstructor;
@@ -22,8 +21,7 @@ public class ScoresDisciplineEvent {
     private TechnologyCardType type;
     private String typeTitle;
     private BigDecimal totalFactor;
-    private Set<ScoresAttestation> scoresAttestations;
-
-    @JsonIgnore
-    BigDecimal calculatedScore;
+    private BigDecimal scoreWithoutFactor;
+    private BigDecimal scoreWithFactor;
+    private Set<ScoresAttestation> attestations;
 }

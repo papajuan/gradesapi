@@ -2,6 +2,7 @@ package com.urfu.services;
 
 import com.urfu.entities.TechnologyCardType;
 import com.urfu.objects.AttestationControl;
+import com.urfu.objects.Grade;
 import com.urfu.objects.TechCardFactorsType;
 import com.urfu.objects.disciplineEvents.ScoresDisciplineEvent;
 import com.urfu.objects.disciplineEvents.TechCardDisciplineEvent;
@@ -11,6 +12,7 @@ import com.urfu.objects.exportAttestations.ScoresAttestation;
 import com.urfu.objects.exportAttestations.TechCardAttestation;
 import com.urfu.objects.studentInfo.DisciplineInfo;
 import com.urfu.objects.studentInfo.ScoresInfo;
+import com.urfu.utils.Util;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -41,9 +43,10 @@ public class DisciplineScoresExporter {
         int eduYear = disciplineInfo.getEduYear();
         Set<ScoresDisciplineEvent> scoresDisciplineEvents =  listScoresDisciplineEvents(techCardDiscipline.getEvents());
         BigDecimal disciplineTotalScore = getDisciplineTotalScore(scoresDisciplineEvents).setScale(2, RoundingMode.DOWN);
+        Grade grade = new Grade(disciplineTotalScore, Util.getMarkFromScore(disciplineTotalScore));
 
         ScoresDiscipline scoresDiscipline = new ScoresDiscipline(disciplineId, techCardDiscipline.getTitle(),
-                disciplineTotalScore, scoresDisciplineEvents, techCardDiscipline.getTitleId());
+                grade, scoresDisciplineEvents, techCardDiscipline.getTitleId());
 
         return new ScoresInfo(studentId, eduYear, semester, scoresDiscipline);
     }
@@ -52,7 +55,7 @@ public class DisciplineScoresExporter {
         BigDecimal result = BigDecimal.ZERO;
 
         for(ScoresDisciplineEvent scoresEvent : scoresEvents)
-            result = result.add(scoresEvent.getCalculatedScore());
+            result = result.add(scoresEvent.getScoreWithFactor());
 
         return result;
     }
@@ -65,10 +68,11 @@ public class DisciplineScoresExporter {
             String typeTitle = techCardEvent.getTypeTitle();
             BigDecimal totalFactor = techCardEvent.getTotalFactor();
             Set<ScoresAttestation> scoresAttestations = listScoresAttestations(techCardEvent.getAttestations());
-            BigDecimal eventCalculatedScore = getCalculatedScore(scoresAttestations, totalFactor);
+            BigDecimal scoreWithFactor = getCalculatedScore(scoresAttestations, totalFactor);
 
             ScoresDisciplineEvent scoresDisciplineEvent =
-                    new ScoresDisciplineEvent(type, typeTitle, totalFactor, scoresAttestations, eventCalculatedScore);
+                    new ScoresDisciplineEvent(type, typeTitle, totalFactor, getScore(scoresAttestations), scoreWithFactor, scoresAttestations);
+
             result.add(scoresDisciplineEvent);
         }
 
@@ -80,10 +84,13 @@ public class DisciplineScoresExporter {
 
         for(TechCardAttestation techCardAttestation : techCardAttestations) {
             TechCardFactorsType type = techCardAttestation.getType();
-            BigDecimal factor = techCardAttestation.getFactor();
-            BigDecimal calculatedScore = getCalculatedScore(techCardAttestation.getControls(), factor).setScale(2, RoundingMode.DOWN);
+            List<AttestationControl> controls = techCardAttestation.getControls();
 
-            ScoresAttestation scoresAttestation = new ScoresAttestation(type, factor, calculatedScore);
+            BigDecimal factor = techCardAttestation.getFactor();
+            BigDecimal scoreWithoutFactor = getScore(techCardAttestation.getControls());
+            BigDecimal scoreWithFactor = getCalculatedScore(controls, factor).setScale(2, RoundingMode.DOWN);
+
+            ScoresAttestation scoresAttestation = new ScoresAttestation(type, factor, scoreWithoutFactor, scoreWithFactor, controls);
             result.add(scoresAttestation);
         }
 
@@ -91,6 +98,10 @@ public class DisciplineScoresExporter {
     }
 
     private BigDecimal getCalculatedScore(List<AttestationControl> controls, BigDecimal factor) throws Exception {
+        return getScore(controls).multiply(factor);
+    }
+
+    private BigDecimal getScore(List<AttestationControl> controls) throws Exception {
         BigDecimal result = BigDecimal.ZERO;
 
         for(AttestationControl control : controls) {
@@ -104,17 +115,21 @@ public class DisciplineScoresExporter {
                         + " больше " + maxScore);
         }
 
-        return result.multiply(factor);
+        return result;
     }
 
-    private BigDecimal getCalculatedScore(Set<ScoresAttestation> scoresAttestations, BigDecimal totalFactor) throws Exception {
+    private BigDecimal getCalculatedScore(Set<ScoresAttestation> scoresAttestations, BigDecimal totalFactor) {
+        return getScore(scoresAttestations).multiply(totalFactor);
+    }
+
+    private BigDecimal getScore(Set<ScoresAttestation> scoresAttestations) {
         BigDecimal result = BigDecimal.ZERO;
 
         for(ScoresAttestation scoresAttestation : scoresAttestations) {
-            BigDecimal calculatedAttestationScore = scoresAttestation.getCalculatedScore();
+            BigDecimal calculatedAttestationScore = scoresAttestation.getScoreWithFactor();
             result = result.add(calculatedAttestationScore);
         }
 
-        return result.multiply(totalFactor);
+        return result;
     }
 }

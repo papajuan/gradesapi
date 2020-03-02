@@ -1,12 +1,12 @@
 package com.urfu.objects.disciplines;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.urfu.objects.Grade;
 import com.urfu.objects.disciplineEvents.ScoresDisciplineEvent;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.util.Set;
 
 /**
@@ -20,7 +20,7 @@ public class ScoresDiscipline {
 
     private String id;
     private String title;
-    private BigDecimal totalCalculatedScore;
+    private Grade result;
 
     Set<ScoresDisciplineEvent> events;
 

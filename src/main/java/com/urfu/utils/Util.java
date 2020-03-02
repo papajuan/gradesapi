@@ -2,6 +2,7 @@ package com.urfu.utils;
 
 import com.google.common.collect.ImmutableSet;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 /**
@@ -20,5 +21,17 @@ public class Util {
 
     public static String getSemester(String semester) {
         return semester.toLowerCase().equals("autumn") ? Util.AUTUMN : Util.SPRING;
+    }
+
+    public static String getMarkFromScore(BigDecimal score) {
+
+        if(score.compareTo(BigDecimal.valueOf(Long.valueOf(80))) >= 0)
+            return "отл.";
+        if(score.compareTo(BigDecimal.valueOf(Long.valueOf(60))) >= 0 && score.compareTo(BigDecimal.valueOf(Long.valueOf(80))) < 0)
+            return "хор.";
+        if(score.compareTo(BigDecimal.valueOf(Long.valueOf(40))) >= 0 && score.compareTo(BigDecimal.valueOf(Long.valueOf(60))) < 0)
+            return "уд.";
+
+        return "неуд.";
     }
 }

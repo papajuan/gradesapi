@@ -21,6 +21,7 @@ public class ScoresDiscipline {
     private String id;
     private String title;
     private BigDecimal totalCalculatedScore;
+
     Set<ScoresDisciplineEvent> events;
 
     @JsonIgnore

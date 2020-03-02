@@ -39,14 +39,30 @@ dependencies {
     // https://mvnrepository.com/artifact/org.apache.commons/commons-collections4
     compile group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
 
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.2.4.RELEASE'
+
+    // https://mvnrepository.com/artifact/org.springframework.security/spring-security-test
+    testCompile group: 'org.springframework.security', name: 'spring-security-test', version: '5.2.2.RELEASE'
+
+    // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient
+    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.11'
+
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.projectlombok:lombok'
+
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
+
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'junit:junit:4.12'
+    implementation 'junit:junit:4.12'
 }
 
 test {

@@ -22,5 +22,5 @@ public class TechnologyCardDisciplineEvent {
     private String typeTitle;
     private BigDecimal totalFactor;
     private boolean testBeforeExam;
-    private Set<TechnologyCardAttestation> technologyCardAttestations;
+    private Set<TechnologyCardAttestation> attestations;
 }

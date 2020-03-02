@@ -16,12 +16,13 @@ public interface StudentTotalMarkRepository extends CrudRepository<StudentTotalM
     @Query("from StudentTotalMark stm where substring(stm.studentId, 1, 32) = :studentId")
     Iterable<StudentTotalMark> findMarksByStudentId(@Param("studentId") String studentId);
 
+    // TODO поле isMinor убрано для тестирования. Что-то надо с этим делать
     @Query("select distinct stm.disciplineLoad from StudentTotalMark stm " +
             "where substring(stm.studentId, 1, 32) = :studentId " +
             "and stm.disciplineLoad.eduYear = :eduYear " +
             "and stm.disciplineLoad.termType = :termType " +
-            "and stm.disciplineLoad.hasNewRegister = false " +
-            "and stm.isMinor = false")
+            "and stm.disciplineLoad.hasNewRegister = false "/* +
+            "and stm.isMinor = false"*/)
     Iterable<DisciplineLoad> findAllDisciplineLoadByStudentYearSemesterInOldRegister(@Param("studentId") String studentId,
                                                                                      @Param("eduYear") int eduYear,
                                                                                      @Param("termType") String termType);

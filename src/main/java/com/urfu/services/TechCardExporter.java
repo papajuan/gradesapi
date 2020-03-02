@@ -1,14 +1,11 @@
 package com.urfu.services;
 
 import com.urfu.entities.*;
-import com.urfu.objects.*;
-import com.urfu.objects.disciplineEvents.ScoresDisciplineEvent;
+import com.urfu.objects.AttestationControl;
+import com.urfu.objects.TechnologyCardFactorsType;
 import com.urfu.objects.disciplineEvents.TechnologyCardDisciplineEvent;
 import com.urfu.objects.disciplines.TechnologyCardDiscipline;
-import com.urfu.objects.disciplines.ScoresDiscipline;
-import com.urfu.objects.exportAttestations.ScoresAttestation;
 import com.urfu.objects.exportAttestations.TechnologyCardAttestation;
-import com.urfu.objects.studentInfo.StudentScoresInfo;
 import com.urfu.objects.studentInfo.StudentTechCardInfo;
 import com.urfu.repositories.*;
 import com.urfu.utils.Util;
@@ -24,7 +21,7 @@ import java.util.*;
  * 19.02.2020
  */
 @Service
-public class StudentInformationExporter {
+public class TechCardExporter {
 
     @Autowired
     ExamListRepository examListRepository;
@@ -50,14 +47,15 @@ public class StudentInformationExporter {
      * @param studentId
      *         the student id
      * @param eduYear
-     *         the edu year
+     *         the eduyear
      * @param semester
      *         the semester
      *
      * @return the student factors information
      */
     public StudentTechCardInfo getStudentFactorsInformation(String studentId, int eduYear, String semester) {
-        Set<TechnologyCardDiscipline> technologyCardDisciplines = listFactorsDisciplines(findAgreedDisciplineLoads(studentId, eduYear, semester), studentId);
+        Set<TechnologyCardDiscipline> technologyCardDisciplines =
+                listFactorsDisciplines(findAgreedDisciplineLoads(studentId, eduYear, semester), studentId);
 
         return new StudentTechCardInfo(studentId, eduYear, semester, technologyCardDisciplines);
     }
@@ -143,102 +141,5 @@ public class StudentInformationExporter {
         }
 
         return result;
-    }
-
-    /**
-     * @param techCardInfo
-     * @param disciplineId
-     *
-     * @return
-     *
-     * @throws Exception
-     */
-    public StudentScoresInfo getScoresInfo(StudentTechCardInfo techCardInfo, String disciplineId) throws Exception {
-        for(TechnologyCardDiscipline techCardDiscipline : techCardInfo.getDisciplines()) {
-            if(techCardDiscipline.getId().equals(disciplineId)) {
-                String studentId = techCardInfo.getUuid();
-                String semester = techCardInfo.getSemester();
-                int eduYear = techCardInfo.getEduYear();
-                Set<ScoresDisciplineEvent> scoresDisciplineEvents =  listScoresDisciplineEvents(techCardDiscipline.getEvents());
-                BigDecimal disciplineTotalScore = getDisciplineTotalScore(scoresDisciplineEvents).setScale(2, RoundingMode.DOWN);
-
-                ScoresDiscipline scoresDiscipline = new ScoresDiscipline(disciplineId, techCardDiscipline.getTitle(),
-                        disciplineTotalScore, scoresDisciplineEvents, techCardDiscipline.getTitleId());
-
-                return new StudentScoresInfo(studentId, eduYear, semester, scoresDiscipline);
-            }
-        }
-
-        return new StudentScoresInfo();
-    }
-
-    private BigDecimal getDisciplineTotalScore(Set<ScoresDisciplineEvent> scoresEvents) {
-        BigDecimal result = BigDecimal.ZERO;
-
-        for(ScoresDisciplineEvent scoresEvent : scoresEvents)
-            result = result.add(scoresEvent.getCalculatedScore());
-
-        return result;
-    }
-
-    private Set<ScoresDisciplineEvent> listScoresDisciplineEvents(Set<TechnologyCardDisciplineEvent> techCardEvents) throws Exception {
-        Set<ScoresDisciplineEvent> result = new HashSet<>();
-
-        for(TechnologyCardDisciplineEvent techCardEvent : techCardEvents) {
-            TechnologyCardType type = techCardEvent.getType();
-            String typeTitle = techCardEvent.getTypeTitle();
-            BigDecimal totalFactor = techCardEvent.getTotalFactor();
-            Set<ScoresAttestation> scoresAttestations = listScoresAttestations(techCardEvent.getTechnologyCardAttestations());
-            BigDecimal eventCalculatedScore = getCalculatedScore(scoresAttestations, totalFactor);
-
-            ScoresDisciplineEvent scoresDisciplineEvent =
-                    new ScoresDisciplineEvent(type, typeTitle, totalFactor, scoresAttestations, eventCalculatedScore);
-            result.add(scoresDisciplineEvent);
-        }
-
-        return result;
-    }
-
-    private Set<ScoresAttestation> listScoresAttestations(Set<TechnologyCardAttestation> techCardAttestations) throws Exception {
-        Set<ScoresAttestation> result = new HashSet<>();
-
-        for(TechnologyCardAttestation techCardAttestation : techCardAttestations) {
-            TechnologyCardFactorsType type = techCardAttestation.getType();
-            BigDecimal factor = techCardAttestation.getFactor();
-            BigDecimal calculatedScore = getCalculatedScore(techCardAttestation.getControls(), factor).setScale(2, RoundingMode.DOWN);
-
-            ScoresAttestation scoresAttestation = new ScoresAttestation(type, factor, calculatedScore);
-            result.add(scoresAttestation);
-        }
-
-        return result;
-    }
-
-    private BigDecimal getCalculatedScore(List<AttestationControl> controls, BigDecimal factor) throws Exception {
-        BigDecimal result = BigDecimal.ZERO;
-
-        for(AttestationControl control : controls) {
-            int maxScore = control.getMaxScore();
-            double studentScore = control.getStudentScore();
-
-            if(studentScore <= maxScore)
-                result = result.add(BigDecimal.valueOf(studentScore));
-            else
-                throw new Exception("Введенный балл " + studentScore + " за КМ " + control.getTitle()
-                            + " больше " + maxScore);
-        }
-
-        return result.multiply(factor);
-    }
-
-    private BigDecimal getCalculatedScore(Set<ScoresAttestation> scoresAttestations, BigDecimal totalFactor) throws Exception {
-        BigDecimal result = BigDecimal.ZERO;
-
-        for(ScoresAttestation scoresAttestation : scoresAttestations) {
-            BigDecimal calculatedAttestationScore = scoresAttestation.getCalculatedScore();
-            result = result.add(calculatedAttestationScore);
-        }
-
-        return result.multiply(totalFactor);
     }
 }

@@ -1,8 +1,10 @@
 package com.urfu.controllers;
 
+import com.urfu.objects.studentInfo.StudentDisciplineInfo;
 import com.urfu.objects.studentInfo.StudentScoresInfo;
 import com.urfu.objects.studentInfo.StudentTechCardInfo;
-import com.urfu.services.StudentInformationExporter;
+import com.urfu.services.DisciplineScoresExporter;
+import com.urfu.services.TechCardExporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +16,10 @@ import org.springframework.web.bind.annotation.*;
 public class GradesController {
 
     @Autowired
-    StudentInformationExporter studentInformationExporter;
+    TechCardExporter techCardExporter;
+
+    @Autowired
+    DisciplineScoresExporter disciplineScoresExporter;
 
     /**
      * Возвращает информацию по всем тех.картам студента согласно дисциплинам.
@@ -34,25 +39,21 @@ public class GradesController {
                                           @RequestParam int eduYear,
                                           @RequestParam String semester) {
 
-        return studentInformationExporter.getStudentFactorsInformation(studentId, eduYear, semester);
+        return techCardExporter.getStudentFactorsInformation(studentId, eduYear, semester);
     }
 
     /**
-     * Принимает информацию по тех.картам студента с проставленными баллами по всем КМ и id дисциплины
+     * Принимает информацию по дисциплине студента с проставленными баллами по всем КМ
      * Возвращает посчитанные баллы студента по дисциплине (по промежуточной, текущей аттестации и общий балл)
      *
-     * @param factorsInformation
-     *         информация о всех тех.картах студента с проставленными баллами (studentScores)
-     * @param disciplineId
-     *         uuid дисциплины, по которой нужны посчитанные баллы
+     * @param disciplineInfo
+     *         информация о дисциплине студента с проставленными баллами (studentScores)
      *
-     * @return информацию о баллах студента по дисциплинам
+     * @return информацию о баллах студента по дисциплине
      */
     @PostMapping(path = "/scores", consumes = "application/json", produces = "application/json")
-    public @ResponseBody
-    StudentScoresInfo getStudentScores(@RequestBody StudentTechCardInfo factorsInformation,
-                                       @RequestParam String disciplineId) throws Exception {
+    public @ResponseBody StudentScoresInfo getStudentScores(@RequestBody StudentDisciplineInfo disciplineInfo) throws Exception {
 
-        return studentInformationExporter.getScoresInfo(factorsInformation, disciplineId);
+        return disciplineScoresExporter.getScoresInfo(disciplineInfo);
     }
 }

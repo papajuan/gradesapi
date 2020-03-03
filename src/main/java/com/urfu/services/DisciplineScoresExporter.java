@@ -14,6 +14,8 @@ import com.urfu.objects.exportAttestations.TechCardAttestation;
 import com.urfu.objects.studentInfo.DisciplineInfo;
 import com.urfu.objects.studentInfo.ScoresInfo;
 import com.urfu.repositories.ControlActionRepository;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +39,12 @@ public class DisciplineScoresExporter {
     private MarkService markService;
 
     /**
+     * Проверка промежуточной аттестации, если балл < 40, то итоговый балл должен быть 0
+     */
+    @Getter @Setter
+    private boolean isIntermediatePassed = true;
+
+    /**
      * @param disciplineInfo
      *
      * @return
@@ -51,7 +59,9 @@ public class DisciplineScoresExporter {
         String semester = disciplineInfo.getSemester();
         int eduYear = disciplineInfo.getEduYear();
         Set<ScoresDisciplineEvent> scoresDisciplineEvents =  listScoresDisciplineEvents(techCardDiscipline.getEvents());
-        BigDecimal disciplineTotalScore = getDisciplineTotalScore(scoresDisciplineEvents).setScale(2, RoundingMode.DOWN);
+        BigDecimal disciplineTotalScore = isIntermediatePassed ?
+                getDisciplineTotalScore(scoresDisciplineEvents).setScale(2, RoundingMode.DOWN)
+                : BigDecimal.ZERO;
 
         ControlAction controlAction = controlActionRepository.getControlActionByDisciplineId(disciplineId).get();
         Grade grade = new Grade(disciplineTotalScore, markService.getMarkFromScore(disciplineTotalScore, controlAction));
@@ -100,6 +110,10 @@ public class DisciplineScoresExporter {
             BigDecimal factor = techCardAttestation.getFactor();
             BigDecimal scoreWithoutFactor = getScore(techCardAttestation.getControls());
             BigDecimal scoreWithFactor = getCalculatedScore(controls, factor).setScale(2, RoundingMode.DOWN);
+
+            if(type.equals(TechCardFactorsType.intermediate) && scoreWithoutFactor.compareTo(BigDecimal.valueOf(40)) < 0) {
+                setIntermediatePassed(false);
+            }
 
             ScoresAttestation scoresAttestation = new ScoresAttestation(type, factor, scoreWithoutFactor, scoreWithFactor, controls);
             result.add(scoresAttestation);

@@ -47,7 +47,7 @@ public class DisciplineScoresExporter {
     /**
      * @param disciplineInfo
      *
-     * @return
+     * @return ScoresInfo
      *
      * @throws Exception
      */

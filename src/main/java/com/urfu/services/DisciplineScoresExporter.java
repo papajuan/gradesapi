@@ -111,7 +111,7 @@ public class DisciplineScoresExporter {
             BigDecimal scoreWithoutFactor = getScore(techCardAttestation.getControls());
             BigDecimal scoreWithFactor = getCalculatedScore(controls, factor).setScale(2, RoundingMode.DOWN);
 
-            if(type.equals(TechCardFactorsType.intermediate) && scoreWithoutFactor.compareTo(BigDecimal.valueOf(40)) < 0) {
+            if(type.equals(TechCardFactorsType.intermediate) && !factor.equals(BigDecimal.ZERO) && scoreWithoutFactor.compareTo(BigDecimal.valueOf(40)) < 0) {
                 setIntermediatePassed(false);
             }
 

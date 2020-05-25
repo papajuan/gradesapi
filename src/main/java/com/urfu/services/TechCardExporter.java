@@ -92,6 +92,10 @@ public class TechCardExporter {
                     : factors.getCurrent().setScale(2, RoundingMode.DOWN);
 
             List<AttestationControl> currentControls = listControls(technologyCardType, studentId, disciplineLoad, isIntermediate);
+
+            if(currentControls.isEmpty())
+                continue;
+
             TechCardAttestation currentTechCardAttestation = new TechCardAttestation(factorsType, factor, currentControls);
 
             result.add(currentTechCardAttestation);

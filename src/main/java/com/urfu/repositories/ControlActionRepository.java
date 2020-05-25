@@ -16,6 +16,6 @@ public interface ControlActionRepository extends CrudRepository<ControlAction, S
     @Query("from ControlAction ca where ca.eventCode = 3")
     Iterable<ControlAction> getTestControlActions();
 
-    @Query("select ca from TechnologyCard tc join tc.event as ca where tc.disciplineLoad.disciplineLoadId = :disciplineId and ca is not null")
+    @Query("select distinct ca from TechnologyCard tc join tc.event as ca where tc.disciplineLoad.disciplineLoadId = :disciplineId and ca is not null and ca.eventCode = 3")
     Optional<ControlAction> getControlActionByDisciplineId(@Param("disciplineId") String disciplineId);
 }

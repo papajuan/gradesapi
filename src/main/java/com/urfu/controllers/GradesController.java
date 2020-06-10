@@ -57,4 +57,9 @@ public class GradesController {
 
         return disciplineScoresExporter.getScoresInfo(disciplineInfo);
     }
+
+    @GetMapping(path = "/test")
+    public String getTestString() {
+        return "works!";
+    }
 }
